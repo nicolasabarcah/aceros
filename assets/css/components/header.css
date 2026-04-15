@@ -1,0 +1,58 @@
+.header-card,
+.summary-card,
+.table-card,
+.chart-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+}
+
+.header-card {
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: none;
+}
+
+.page-title {
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+}
+
+.page-subtitle {
+    margin-bottom: 0;
+}
+
+.btn-primary {
+    border-radius: 999px;
+    padding: 0 24px;
+    min-height: 44px;
+    border: 0;
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--color-primary);
+    color: #fff;
+    opacity: 0.8;
+}
+
+.btn-light {
+    min-height: 44px;
+    border-radius: 999px;
+    border-color: var(--border-soft);
+    color: var(--color-primary);
+    background-color: var(--card-bg);
+    padding: 0 24px;
+}
+
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active {
+    color: var(--color-primary);
+    background-color: var(--color-surface-soft);
+    border-color: var(--border-soft);
+}

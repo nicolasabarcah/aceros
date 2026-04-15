@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&display=swap");
+
+body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+.page-title,
+.summary-value,
+.section-title,
+.badge-soft-primary,
+.badge-soft-success,
+.badge-soft-warning,
+.amount-positive,
+.amount-negative,
+.btn-primary {
+    font-weight: 500;
+}
+
+.page-subtitle,
+.summary-label,
+.custom-table thead th,
+.chart-placeholder {
+    color: var(--text-soft);
+}
+
+.summary-value,
+.amount-positive,
+.amount-negative,
+.custom-table tbody td.text-end {
+    font-family: var(--font-numeric);
+}

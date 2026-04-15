@@ -1,0 +1,103 @@
+:root {
+    --bg-page: #ffffff;
+    --color-white: #ffffff;
+    --color-primary: #94cb08;
+    --color-secondary: #242332;
+    --color-tertiary: #7b4df1;
+    --color-neutral: #eaeaea;
+    --color-muted: #8e8b9c;
+    --color-tertiary-soft: #b8a1f8;
+    --color-surface-soft: #eaeaea;
+    --text-main: #232434;
+    --text-soft: #8e8b9c;
+    --card-bg: #ffffff;
+    --border-soft: #eaeaea;
+    --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --radius: 12px;
+    --font-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-numeric: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.bg-primary-brand {
+    background-color: var(--color-primary) !important;
+}
+
+.bg-secondary-brand {
+    background-color: var(--color-secondary) !important;
+}
+
+.bg-tertiary-brand {
+    background-color: var(--color-tertiary) !important;
+}
+
+.bg-neutral-brand {
+    background-color: var(--color-neutral) !important;
+}
+
+.bg-muted-brand {
+    background-color: var(--color-muted) !important;
+}
+
+.bg-tertiary-soft-brand {
+    background-color: var(--color-tertiary-soft) !important;
+}
+
+.bg-white-brand {
+    background-color: var(--color-white) !important;
+}
+
+.text-primary-brand {
+    color: var(--color-primary) !important;
+}
+
+.text-secondary-brand {
+    color: var(--color-secondary) !important;
+}
+
+.text-tertiary-brand {
+    color: var(--color-tertiary) !important;
+}
+
+.text-neutral-brand {
+    color: var(--color-neutral) !important;
+}
+
+.text-muted-brand {
+    color: var(--color-muted) !important;
+}
+
+.text-tertiary-soft-brand {
+    color: var(--color-tertiary-soft) !important;
+}
+
+.text-white-brand {
+    color: var(--color-white) !important;
+}
+
+.border-primary-brand {
+    border-color: var(--color-primary) !important;
+}
+
+.border-secondary-brand {
+    border-color: var(--color-secondary) !important;
+}
+
+.border-tertiary-brand {
+    border-color: var(--color-tertiary) !important;
+}
+
+.border-neutral-brand {
+    border-color: var(--color-neutral) !important;
+}
+
+.border-muted-brand {
+    border-color: var(--color-muted) !important;
+}
+
+.border-tertiary-soft-brand {
+    border-color: var(--color-tertiary-soft) !important;
+}
+
+.border-white-brand {
+    border-color: var(--color-white) !important;
+}

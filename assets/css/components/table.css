@@ -1,0 +1,54 @@
+.table-card {
+    padding: 22px;
+    box-shadow: none;
+}
+
+.custom-table {
+    margin-bottom: 0;
+}
+
+.custom-table thead th {
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: normal;
+    border-bottom-color: var(--border-soft);
+    padding-top: 0;
+}
+
+.custom-table tbody td {
+    vertical-align: middle;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-bottom-color: var(--border-soft);
+}
+
+.badge-soft-primary,
+.badge-soft-success,
+.badge-soft-warning {
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.badge-soft-primary {
+    background: var(--color-surface-soft);
+    color: var(--color-primary);
+}
+
+.badge-soft-success {
+    background: #e8f6ef;
+    color: #46c18c;
+}
+
+.badge-soft-warning {
+    background: #fff3db;
+    color: #d1a23c;
+}
+
+.amount-positive {
+    color: var(--text-main);
+}
+
+.amount-negative {
+    color: var(--text-main);
+}

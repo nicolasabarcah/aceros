@@ -1,0 +1,35 @@
+.summary-card {
+    padding: 24px;
+    height: 100%;
+    background: var(--color-surface-soft);
+    border: 0;
+    box-shadow: none;
+}
+
+.summary-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.summary-value {
+    font-size: 24px;
+    margin-bottom: 0;
+    color: var(--text-main);
+}
+
+.summary-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    color: var(--color-primary);
+    font-size: 1.05rem;
+}
+
+.section-title {
+    font-size: 16px;
+    margin-bottom: 0;
+}
