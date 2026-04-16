@@ -1,0 +1,47 @@
+.summary-card {
+    padding: 24px;
+    height: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border-soft);
+    box-shadow: none;
+}
+
+.summary-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.summary-value {
+    font-size: 24px;
+    margin-bottom: 0;
+    color: var(--text-main);
+}
+
+.summary-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 1.35rem;
+}
+
+.section-title {
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+.summary-icon-total {
+    background: var(--color-secondary);
+}
+
+.summary-icon-income {
+    background: var(--color-primary);
+}
+
+.summary-icon-expense {
+    background: var(--color-expense-strong);
+}

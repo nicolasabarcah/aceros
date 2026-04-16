@@ -1,0 +1,259 @@
+body.modal-open {
+    overflow: hidden;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes modalFadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-24px) scale(0.97); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1);    }
+}
+
+@keyframes modalSlideOut {
+    from { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1);    }
+    to   { opacity: 0; transform: translateX(-50%) translateY(-16px) scale(0.97); }
+}
+
+.app-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: none;
+}
+
+.app-modal.is-open {
+    display: block;
+}
+
+.app-modal.is-open .app-modal__backdrop {
+    animation: modalFadeIn 0.2s ease forwards;
+}
+
+.app-modal.is-closing .app-modal__backdrop {
+    animation: modalFadeOut 0.2s ease forwards;
+}
+
+.app-modal.is-open .app-modal__dialog {
+    animation: modalSlideIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.app-modal.is-closing .app-modal__dialog {
+    animation: modalSlideOut 0.18s ease forwards;
+}
+
+/* Si el dialog fue arrastrado, slideOut rompe (asume translateX(-50%)).
+   En ese caso solo hacer fade sin mover el transform. */
+.app-modal.is-closing .app-modal__dialog.is-fading-out {
+    animation: modalFadeOut 0.18s ease forwards;
+}
+
+.app-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 39, 71, 0.45);
+}
+
+.app-modal__dialog {
+    position: absolute;
+    width: min(92vw, 720px);
+    top: 6vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    box-shadow: 0 20px 40px rgba(15, 39, 71, 0.2);
+    max-height: 88vh;
+    overflow: auto;
+    border: none;
+    user-select: none;
+}
+
+.app-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 18px 20px;
+    background: var(--color-primary);
+    border-bottom: none;
+    border-radius: var(--radius) var(--radius) 0 0;
+    transition: background-color 0.25s ease;
+    cursor: grab;
+}
+
+.app-modal__header.is-dragging {
+    cursor: grabbing;
+}
+
+.app-modal__title {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.app-modal__close {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-modal__dialog.is-expense .app-modal__header {
+    background: var(--color-expense);
+}
+
+.app-modal__dialog.is-expense .btn-primary {
+    background-color: var(--color-expense);
+    border-color: var(--color-expense-strong);
+}
+
+.app-modal__dialog.is-expense .btn-primary:hover {
+    background-color: var(--color-expense-strong);
+    border-color: var(--color-expense-strong);
+}
+
+.app-modal__body {
+    padding: 18px 20px 20px;
+}
+
+.app-modal__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.app-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.app-field.full {
+    grid-column: 1 / -1;
+}
+
+.app-field label {
+    font-size: 0.86rem;
+    color: var(--text-soft);
+}
+
+.app-field input,
+.app-field select,
+.app-field textarea {
+    width: 100%;
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-size: 0.92rem;
+    padding: 10px 12px;
+}
+
+.tx-type-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tx-type-label {
+    font-size: 0.88rem;
+    color: var(--text-soft);
+    user-select: none;
+}
+
+.tx-type-label.is-active {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.tx-switch {
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.tx-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.tx-switch__track {
+    width: 52px;
+    height: 30px;
+    border-radius: 999px;
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary-dark, #1558c0);
+    padding: 3px;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.tx-switch__thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    transform: translateX(0);
+    transition: transform 0.2s ease;
+}
+
+.tx-switch input:checked + .tx-switch__track {
+    background: var(--color-expense);
+    border-color: var(--color-expense-strong);
+}
+
+.tx-switch input:checked + .tx-switch__track .tx-switch__thumb {
+    transform: translateX(22px);
+}
+
+.tx-switch input:focus-visible + .tx-switch__track {
+    outline: 2px solid rgba(31, 111, 235, 0.35);
+    outline-offset: 2px;
+}
+
+.app-field textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.app-field input:focus,
+.app-field select:focus,
+.app-field textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.app-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+    .app-modal__dialog {
+        margin: 4vh auto;
+    }
+
+    .app-modal__grid {
+        grid-template-columns: 1fr;
+    }
+}

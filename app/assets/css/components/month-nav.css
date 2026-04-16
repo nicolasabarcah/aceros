@@ -1,0 +1,51 @@
+.month-nav {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    border: 1px solid var(--border-soft);
+    border-radius: 999px;
+    background: var(--card-bg);
+    min-height: 46px;
+    padding: 1px 4px;
+}
+
+.month-nav__btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.month-nav__btn:hover,
+.month-nav__btn:focus-visible {
+    background: var(--color-surface-soft);
+    color: var(--color-primary);
+    outline: none;
+}
+
+.month-nav__label {
+    min-width: 94px;
+    text-align: center;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    font-weight: 600;
+    user-select: none;
+}
+
+@media (max-width: 576px) {
+    .month-nav {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .month-nav__label {
+        flex: 1;
+    }
+}

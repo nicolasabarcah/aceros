@@ -23,6 +23,26 @@
     margin-bottom: 0;
 }
 
+/* Interaccion base para botones actuales y futuros */
+.btn {
+    transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.btn:hover:not(:disabled),
+.btn:focus-visible:not(:disabled) {
+    background-color: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+    box-shadow: none;
+}
+
+.btn:active:not(:disabled) {
+    background-color: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+    box-shadow: none;
+}
+
 .btn-primary {
     border-radius: 999px;
     padding: 0 24px;
@@ -37,7 +57,6 @@
 .btn-primary:active {
     background-color: var(--color-primary);
     color: #fff;
-    opacity: 0.8;
 }
 
 .btn-light {
@@ -52,7 +71,18 @@
 .btn-light:hover,
 .btn-light:focus,
 .btn-light:active {
-    color: var(--color-primary);
-    background-color: var(--color-surface-soft);
-    border-color: var(--border-soft);
+    background-color: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+@media (max-width: 576px) {
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions__btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
