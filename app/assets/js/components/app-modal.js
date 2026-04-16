@@ -66,7 +66,12 @@
         modal.__opener = opener || document.activeElement;
         modal.classList.add("is-open");
         modal.setAttribute("aria-hidden", "false");
-        document.body.classList.add("modal-open");
+        modal.dispatchEvent(new CustomEvent("appmodal:open", {
+            bubbles: true,
+            detail: {
+                opener: modal.__opener
+            }
+        }));
 
         const firstField = findFirstField(modal);
         if (firstField) {
@@ -104,8 +109,14 @@
 
             if (activeModal === modal) {
                 activeModal = null;
-                document.body.classList.remove("modal-open");
             }
+
+            modal.dispatchEvent(new CustomEvent("appmodal:close", {
+                bubbles: true,
+                detail: {
+                    opener: modal.__opener || null
+                }
+            }));
 
             if (modal.__opener && typeof modal.__opener.focus === "function") {
                 modal.__opener.focus();

@@ -1,0 +1,6 @@
+[2026-04-16 09:06:31] [app] [EXCEPTION] C:\laragon\www\aceros\app\conexion.php:16 || Unknown database 'acerosapp'
+[2026-04-16 09:43:28] [app] [EXCEPTION] C:\laragon\www\aceros\app\cuentas_registros.php:54 || Table 'acerosapp.cuentas' doesn't exist
+[2026-04-16 10:52:11] [app] [EXCEPTION] C:\laragon\www\aceros\app\index.php:69 || Call to undefined function formatearMoneda()
+[2026-04-16 10:54:56] [app] [EXCEPTION] C:\laragon\www\aceros\app\index.php:70 || Call to undefined function formatearMoneda()
+[2026-04-16 11:17:39] [app] [EXCEPTION] C:\laragon\www\aceros\app\index.php:121 || Unknown column 'c.tipo' in 'field list'
+[2026-04-16 11:17:40] [app] [EXCEPTION] C:\laragon\www\aceros\app\index.php:121 || Unknown column 'c.tipo' in 'field list'

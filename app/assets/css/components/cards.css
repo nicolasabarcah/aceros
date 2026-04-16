@@ -17,6 +17,24 @@
     color: var(--text-main);
 }
 
+.summary-value--loading {
+    min-height: 36px;
+}
+
+.app-inline-loader {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 36px;
+    color: var(--text-soft);
+}
+
+.app-inline-loader .spinner-border {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.14em;
+}
+
 .summary-icon {
     width: 56px;
     height: 56px;
@@ -44,4 +62,48 @@
 
 .summary-icon-expense {
     background: var(--color-expense-strong);
+}
+
+.account-card {
+    padding: 15px;
+}
+
+.account-card__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.account-card__link:hover,
+.account-card__link:focus-visible {
+    color: inherit;
+    text-decoration: none;
+}
+
+.account-card__link:hover .account-card,
+.account-card__link:focus-visible .account-card {
+    border-color: var(--color-primary);
+}
+
+.account-card__type {
+    font-size: 0.72rem;
+    margin-bottom: 4px;
+}
+
+.account-card__value {
+    font-size: 1rem;
+    line-height: 1.2;
+    margin-bottom: 6px;
+}
+
+.account-card__name {
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
+.account-card__icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    font-size: 0.95rem;
 }

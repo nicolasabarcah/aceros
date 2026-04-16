@@ -1,4 +1,85 @@
 (function() {
+    function parseTransactionDate(rawDate) {
+        if (!rawDate) {
+            return null;
+        }
+
+        const parsedDate = new Date(rawDate + "T00:00:00");
+        if (Number.isNaN(parsedDate.getTime())) {
+            return null;
+        }
+
+        return parsedDate;
+    }
+
+    function formatCurrency(value) {
+        return "$ " + Number(value || 0).toLocaleString("es-CL", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+    }
+
+    function initMonthlySummaryCards() {
+        const summary = document.getElementById("accountMonthlySummary");
+        const table = document.getElementById("transactionsTable");
+        const monthLabel = document.getElementById("headerMonthLabel");
+        const balanceTotal = document.getElementById("summaryBalanceTotal");
+        const incomeMonth = document.getElementById("summaryIncomeMonth");
+        const expenseMonth = document.getElementById("summaryExpenseMonth");
+        if (!summary || !table || !monthLabel || !balanceTotal || !incomeMonth || !expenseMonth) {
+            return;
+        }
+
+        const rows = Array.from(table.querySelectorAll("tbody tr:not(#txEmptyState)"));
+        const initialBalance = parseFloat(summary.dataset.initialBalance || "0") || 0;
+
+        function getSelectedMonthState() {
+            const month = parseInt(monthLabel.dataset.month || "", 10);
+            const year = parseInt(monthLabel.dataset.year || "", 10);
+
+            return {
+                month: Number.isNaN(month) ? new Date().getMonth() : month,
+                year: Number.isNaN(year) ? new Date().getFullYear() : year
+            };
+        }
+
+        function calculateMonthlySummary() {
+            const selected = getSelectedMonthState();
+            const periodEnd = new Date(selected.year, selected.month + 1, 0, 23, 59, 59, 999);
+            let runningBalance = initialBalance;
+            let monthIncome = 0;
+            let monthExpense = 0;
+
+            rows.forEach(function(row) {
+                const rowDate = parseTransactionDate(row.getAttribute("data-tx-date") || "");
+                const rawAmount = parseFloat(row.getAttribute("data-tx-amount") || "0") || 0;
+                const txType = row.getAttribute("data-tx-type") || "egreso";
+                const amount = Math.abs(rawAmount);
+
+                if (!rowDate || rowDate > periodEnd) {
+                    return;
+                }
+
+                runningBalance += txType === "ingreso" ? amount : -amount;
+
+                if (rowDate.getMonth() === selected.month && rowDate.getFullYear() === selected.year) {
+                    if (txType === "ingreso") {
+                        monthIncome += amount;
+                    } else {
+                        monthExpense += amount;
+                    }
+                }
+            });
+
+            balanceTotal.textContent = formatCurrency(runningBalance);
+            incomeMonth.textContent = formatCurrency(monthIncome);
+            expenseMonth.textContent = formatCurrency(monthExpense);
+        }
+
+        document.addEventListener("appmonthchange", calculateMonthlySummary);
+        calculateMonthlySummary();
+    }
+
     function initTransactionsTable() {
         const table = document.getElementById("transactionsTable");
         if (!table) {
@@ -13,12 +94,15 @@
         const pageSizeSelect = document.getElementById("txPageSize");
         const info = document.getElementById("txInfo");
         const pagination = document.getElementById("txPagination");
+        const monthLabel = document.getElementById("headerMonthLabel");
         const pageSizeStorageKey = "txTablePageSize";
         const allowedPageSizes = [25, 50, 75, 100];
 
         let filteredRows = [].concat(allRows);
         let currentPage = 1;
         let pageSize = 25;
+        let selectedMonth = new Date().getMonth();
+        let selectedYear = new Date().getFullYear();
 
         function getInitialPageSize() {
             const stored = window.localStorage ? parseInt(localStorage.getItem(pageSizeStorageKey) || "", 10) : NaN;
@@ -40,6 +124,36 @@
             return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
 
+        function parseRowDate(row) {
+            return parseTransactionDate(row.getAttribute("data-tx-date") || "");
+        }
+
+        function rowMatchesSelectedMonth(row) {
+            const rowDate = parseRowDate(row);
+            if (!rowDate) {
+                return false;
+            }
+
+            return rowDate.getMonth() === selectedMonth && rowDate.getFullYear() === selectedYear;
+        }
+
+        function syncSelectedMonthFromLabel() {
+            if (!monthLabel) {
+                return;
+            }
+
+            const monthValue = parseInt(monthLabel.dataset.month || "", 10);
+            const yearValue = parseInt(monthLabel.dataset.year || "", 10);
+
+            if (!Number.isNaN(monthValue)) {
+                selectedMonth = monthValue;
+            }
+
+            if (!Number.isNaN(yearValue)) {
+                selectedYear = yearValue;
+            }
+        }
+
         function applyCellLabels() {
             allRows.forEach(function(row) {
                 const cells = Array.from(row.querySelectorAll("td"));
@@ -51,13 +165,17 @@
         }
 
         function filterRows(query) {
-            if (!query) {
-                filteredRows = [].concat(allRows);
-                return;
-            }
+            const normalizedQuery = normalizeText(query || "");
 
-            const normalizedQuery = normalizeText(query);
             filteredRows = allRows.filter(function(row) {
+                if (!rowMatchesSelectedMonth(row)) {
+                    return false;
+                }
+
+                if (!normalizedQuery) {
+                    return true;
+                }
+
                 return normalizeText(row.innerText).includes(normalizedQuery);
             });
         }
@@ -162,7 +280,22 @@
             });
         }
 
+        document.addEventListener("appmonthchange", function(event) {
+            if (event && event.detail) {
+                selectedMonth = event.detail.month;
+                selectedYear = event.detail.year;
+            } else {
+                syncSelectedMonthFromLabel();
+            }
+
+            currentPage = 1;
+            filterRows(searchInput ? searchInput.value.trim() : "");
+            renderTable();
+        });
+
+        syncSelectedMonthFromLabel();
         applyCellLabels();
+        filterRows(searchInput ? searchInput.value.trim() : "");
         renderTable();
     }
 
@@ -175,12 +308,70 @@
         }
 
         const monthNames = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-        const now = new Date();
-        let month = now.getMonth();
-        let year = now.getFullYear();
+        const monthStorageKey = "cuentasSelectedMonth";
+        let month = 0;
+        let year = 0;
+
+        function saveSelectedMonth() {
+            if (!window.localStorage) {
+                return;
+            }
+
+            localStorage.setItem(monthStorageKey, JSON.stringify({
+                month: month,
+                year: year
+            }));
+        }
+
+        function loadSelectedMonth() {
+            if (!window.localStorage) {
+                return false;
+            }
+
+            try {
+                const storedValue = localStorage.getItem(monthStorageKey);
+                if (!storedValue) {
+                    return false;
+                }
+
+                const parsedValue = JSON.parse(storedValue);
+                const storedMonth = parseInt(parsedValue.month, 10);
+                const storedYear = parseInt(parsedValue.year, 10);
+
+                if (Number.isNaN(storedMonth) || Number.isNaN(storedYear) || storedMonth < 0 || storedMonth > 11) {
+                    return false;
+                }
+
+                month = storedMonth;
+                year = storedYear;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function setCurrentMonth() {
+            const now = new Date();
+            month = now.getMonth();
+            year = now.getFullYear();
+        }
 
         function updateLabel() {
+            monthLabel.dataset.month = String(month);
+            monthLabel.dataset.year = String(year);
             monthLabel.textContent = monthNames[month] + " " + String(year);
+            saveSelectedMonth();
+            document.dispatchEvent(new CustomEvent("appmonthchange", {
+                detail: {
+                    month: month,
+                    year: year
+                }
+            }));
+        }
+
+        function resetToCurrentMonth() {
+            setCurrentMonth();
+            updateLabel();
         }
 
         monthPrevBtn.addEventListener("click", function() {
@@ -201,32 +392,98 @@
             updateLabel();
         });
 
+        monthLabel.addEventListener("click", function() {
+            resetToCurrentMonth();
+        });
+
+        monthLabel.addEventListener("keydown", function(event) {
+            if (event.key !== "Enter" && event.key !== " ") {
+                return;
+            }
+
+            event.preventDefault();
+            resetToCurrentMonth();
+        });
+
+        if (!loadSelectedMonth()) {
+            setCurrentMonth();
+        }
         updateLabel();
     }
 
     function initTransactionForm() {
         const modal = document.getElementById("transactionModal");
         const form = document.getElementById("transactionForm");
+        const amountInput = document.getElementById("txAmount");
+        const amountHiddenInput = document.getElementById("txAmountValue");
         if (!modal || !form) {
             return;
         }
 
-        if (window.AppModal && typeof window.AppModal.resetVariantState === "function") {
-            window.AppModal.resetVariantState(modal);
+        function sanitizeAmount(value) {
+            return value.replace(/\D/g, "");
         }
+
+        function formatAmount(value) {
+            if (!value) {
+                return "";
+            }
+
+            return "$ " + new Intl.NumberFormat("es-CL").format(Number(value));
+        }
+
+        function syncAmountField(rawValue) {
+            const sanitizedValue = sanitizeAmount(rawValue);
+
+            if (amountHiddenInput) {
+                amountHiddenInput.value = sanitizedValue;
+            }
+
+            if (amountInput) {
+                amountInput.value = formatAmount(sanitizedValue);
+            }
+        }
+
+        function resetTransactionForm() {
+            form.reset();
+
+            if (amountHiddenInput) {
+                amountHiddenInput.value = "";
+            }
+
+            if (amountInput) {
+                amountInput.value = "";
+            }
+
+            if (window.AppModal && typeof window.AppModal.resetVariantState === "function") {
+                window.AppModal.resetVariantState(modal);
+            }
+        }
+
+        if (amountInput) {
+            amountInput.addEventListener("input", function(event) {
+                syncAmountField(event.target.value);
+            });
+        }
+
+        resetTransactionForm();
+
+        modal.addEventListener("appmodal:open", function() {
+            resetTransactionForm();
+        });
 
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-            form.reset();
+            resetTransactionForm();
 
             if (window.AppModal) {
-                window.AppModal.resetVariantState(modal);
                 window.AppModal.close(modal);
             }
         });
     }
 
     function initPage() {
+        initMonthlySummaryCards();
         initTransactionsTable();
         initHeaderMonthNavigator();
         initTransactionForm();
