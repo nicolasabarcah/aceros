@@ -1,5 +1,5 @@
 import { createTransaction, getAccountById, listAccounts, listCategories, listTransactions } from "../services/finance-api.js";
-import { escapeHtml, formatCurrency, formatDisplayAmount, getCategoryType, getPeriodEnd, getSignedAmount, initMonthNavigator, normalizeText, parseTransactionDate, sameMonth, showNotice } from "../utils/app-utils.js";
+import { escapeHtml, formatCurrency, formatDisplayAmount, getCategoryType, getLocalDateInputValue, getPeriodEnd, getSignedAmount, initMonthNavigator, normalizeText, parseTransactionDate, sameMonth, showNotice } from "../utils/app-utils.js";
 
 (function() {
     const pageSizeStorageKey = "txTablePageSize";
@@ -411,7 +411,7 @@ import { escapeHtml, formatCurrency, formatDisplayAmount, getCategoryType, getPe
             elements.note.value = "";
         }
         if (elements.date) {
-            elements.date.value = new Date().toISOString().slice(0, 10);
+            elements.date.value = getLocalDateInputValue();
         }
         if (window.AppModal && elements.modal) {
             window.AppModal.resetVariantState(elements.modal);
